@@ -1,40 +1,31 @@
-import {
-  Paper,
-  Table,
-  TableContainer,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from '@mui/material'
+import React from 'react'
 import currencyJson from '../../mock/euro-currency.json'
+import './practical-3.css'
 
 const Practical3 = () => {
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Base Currency</TableCell>
-            <TableCell>Target Currency</TableCell>
-            <TableCell>Rate</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
+    <div className='table-container'>
+      <table className='custom-table'>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Base Currency</th>
+            <th>Target Currency</th>
+            <th>Rate</th>
+          </tr>
+        </thead>
+        <tbody>
           {currencyJson.map((row, index) => (
-            <TableRow key={index}>
-              <TableCell>{row.fields.date}</TableCell>
-              <TableCell>{'EUR'}</TableCell>
-              <TableCell>{row.fields.currency}</TableCell>
-              <TableCell>{`${row.fields.rate.toFixed(2)} ${
-                row.fields.currency
-              }`}</TableCell>
-            </TableRow>
+            <tr key={index}>
+              <td>{row.fields.date}</td>
+              <td>EUR</td>
+              <td>{row.fields.currency}</td>
+              <td>{`${row.fields.rate.toFixed(2)} ${row.fields.currency}`}</td>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+        </tbody>
+      </table>
+    </div>
   )
 }
 

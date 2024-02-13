@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Box, Grid, Fade } from '@mui/material'
+import React, { useState } from 'react'
 
 const data = [
   Array(3).fill('header'),
@@ -10,11 +9,11 @@ const data = [
 
 const Practical2 = () => {
   return (
-    <Grid container spacing={7}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       {data.map((list, i) => {
         return (
-          <Grid item xs={12} key={i}>
-            <Grid container spacing={7}>
+          <div key={i}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               {list.map((name, index) => {
                 const previousLength = data.reduce((total, next, idx) => {
                   if (idx < i) total += next.length
@@ -27,68 +26,58 @@ const Practical2 = () => {
                     : `Tooltip ${previousLength + index + 1}`
 
                 return (
-                  <Message
+                  <EachCell
                     key={index}
                     tooltipMessage={tooltipMessage}
                     value={`${name} ${name === 'header' ? index + 1 : i}`}
                   />
                 )
               })}
-            </Grid>
-          </Grid>
+            </div>
+          </div>
         )
       })}
-    </Grid>
+    </div>
   )
 }
 
-const Message = ({ tooltipMessage, value }) => {
+const EachCell = ({ tooltipMessage, value }) => {
   const [isFocused, setIsFocused] = useState(false)
 
   return (
-    <Grid
+    <div
       onMouseEnter={() => setIsFocused(true)}
       onMouseLeave={() => setIsFocused(false)}
-      item
-      xs={4}
+      style={{
+        flex: '1',
+        height: '100px',
+        border: '1px solid #fff',
+        color: '#fff',
+        position: 'relative',
+        boxShadow: isFocused ? '0px 0px 19px 1px rgba(0,0,0,0.2)' : '',
+        transition: '300ms',
+        margin: 20,
+      }}
     >
-      <Box
-        style={{
-          height: '100px',
-          width: '100%',
-          border: '1px solid #fff',
-          color: '#fff',
-          position: 'relative',
-          boxShadow: isFocused ? '0px 0px 19px 1px rgba(0,0,0,0.2)' : '',
-          transition: '300ms',
-        }}
-      >
-        {value}
-        <Fade
-          in={isFocused}
-          timeout={{
-            enter: 300,
-            exit: 300,
+      {value}
+      {isFocused && (
+        <div
+          style={{
+            position: 'absolute',
+            right: -25,
+            top: -30,
+            height: '40px',
+            width: '90px',
+            backgroundColor: 'rgba(0,0,0,0.4)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
-          <Box
-            style={{
-              position: 'absolute',
-              right: -25,
-              top: -30,
-              height: '40px',
-              width: '90px',
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {tooltipMessage}
-          </Box>
-        </Fade>
-      </Box>
-    </Grid>
+          {tooltipMessage}
+        </div>
+      )}
+    </div>
   )
 }
 

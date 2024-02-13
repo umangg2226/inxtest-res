@@ -1,7 +1,20 @@
 import React from 'react'
-import { Box, Tab, Tabs, Typography, Paper } from '@mui/material'
-import { styled } from '@mui/system'
 import { Practical1, Practical2, Practical3 } from './Tabs'
+
+const tabList = [
+  {
+    id: 0,
+    name: 'Practical 1',
+  },
+  {
+    id: 1,
+    name: 'Practical 2',
+  },
+  {
+    id: 2,
+    name: 'Practical 3',
+  },
+]
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props
@@ -14,71 +27,92 @@ const TabPanel = (props) => {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <div style={{ padding: 20 }}>{children}</div>}
     </div>
   )
 }
 
-const FullScreenCenterPaper = styled(Paper)({
-  width: '100%',
-  height: 'calc(100vh - 120px)',
-  padding: 20,
-  boxSizing: 'border-box',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-})
-
-const FullScreenPaper = styled(Paper)(
-  ({ dynamicPadding, display = 'flex' }) => ({
-    width: '100%',
-    height: 'calc(100vh - 120px)',
-    padding: dynamicPadding || 20,
-    display,
-  })
+const FullScreenCenterPaper = ({ style, children }) => (
+  <div
+    style={{
+      width: '100%',
+      height: 'calc(100vh - 120px)',
+      padding: 20,
+      boxSizing: 'border-box',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      ...(style || {}),
+    }}
+  >
+    {children}
+  </div>
 )
+
+const FullScreenPaper = ({ children, style }) => (
+  <div
+    style={{
+      height: 'calc(100vh - 120px)',
+      boxSizing: 'border-box',
+      ...(style || {}),
+    }}
+  >
+    {children}
+  </div>
+)
+
+const ButtonList = ({ items, activeIndex, onButtonClick }) => {
+  return items.map((s) => {
+    return (
+      <div
+        id={s.id}
+        className={s.id === activeIndex ? 'tab-button-active' : 'tab-button'}
+        onClick={() => onButtonClick(s.id)}
+      >
+        <span>{s.name}</span>
+      </div>
+    )
+  })
+}
 
 const Layout = () => {
   const [value, setValue] = React.useState(0)
 
-  const handleChange = (_, newValue) => {
+  const onButtonClick = React.useCallback((newValue) => {
     setValue(newValue)
-  }
+  }, [])
 
   return (
     <>
-      <Tabs value={value} onChange={handleChange} centered>
-        <Tab label='Practical 1' />
-        <Tab label='Practical 2' />
-        <Tab label='Practical 3' />
-      </Tabs>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <ButtonList
+          items={tabList}
+          activeIndex={value}
+          onButtonClick={onButtonClick}
+        />
+      </div>
 
       <TabPanel value={value} index={0}>
-        <FullScreenCenterPaper
-          elevation={3}
-          style={{ backgroundColor: '#3498db' }}
-        >
+        <FullScreenCenterPaper style={{ backgroundColor: '#3498db' }}>
           <Practical1 />
         </FullScreenCenterPaper>
       </TabPanel>
 
       <TabPanel value={value} index={1}>
         <FullScreenPaper
-          dynamicPadding='50px'
-          display='block'
-          style={{ backgroundColor: '#d401f0' }}
+          style={{
+            backgroundColor: '#d401f0',
+            padding: '30px',
+            display: 'block',
+          }}
         >
           <Practical2 />
         </FullScreenPaper>
       </TabPanel>
 
       <TabPanel value={value} index={2}>
-        <FullScreenPaper dynamicPadding='0px'>
+        <FullScreenPaper style={{ padding: '0px', display: 'block' }}>
           <Practical3 />
         </FullScreenPaper>
       </TabPanel>
